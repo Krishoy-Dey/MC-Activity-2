@@ -1,0 +1,65 @@
+package com.example.quizapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.quizapp.MainActivity;
+
+public class ResultActivity extends AppCompatActivity {
+
+    TextView tvFinalScore, tvResultMessage, tvResultEmoji;
+    Button btnPlayAgain, btnExit;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_result);
+
+        // Connect UI elements
+        tvFinalScore    = findViewById(R.id.tvFinalScore);
+        tvResultMessage = findViewById(R.id.tvResultMessage);
+        tvResultEmoji   = findViewById(R.id.tvResultEmoji);
+        btnPlayAgain    = findViewById(R.id.btnPlayAgain);
+        btnExit         = findViewById(R.id.btnExit);
+
+        // Get the score passed from QuizActivity
+        int score = getIntent().getIntExtra("SCORE", 0);
+
+        // Show the score
+        tvFinalScore.setText("Your Score: " + score + " / 5");
+
+        // Show emoji and message based on score
+        if (score == 5) {
+            tvResultEmoji.setText("🏆");
+            tvResultMessage.setText("Perfect Score! You're a Cricket Master!");
+        } else if (score >= 4) {
+            tvResultEmoji.setText("🌟");
+            tvResultMessage.setText("Excellent! Almost perfect!");
+        } else if (score >= 3) {
+            tvResultEmoji.setText("😊");
+            tvResultMessage.setText("Good Job! Keep it up!");
+        } else if (score >= 2) {
+            tvResultEmoji.setText("📚");
+            tvResultMessage.setText("Not bad! A little more practice!");
+        } else {
+            tvResultEmoji.setText("💪");
+            tvResultMessage.setText("Keep practicing! You'll get better!");
+        }
+
+        // Play Again → go back to Home Screen
+        btnPlayAgain.setOnClickListener(v -> {
+            Intent intent = new Intent(ResultActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clear back stack
+            startActivity(intent);
+            finish();
+        });
+
+        // Exit → close the app
+        btnExit.setOnClickListener(v -> {
+            finishAffinity(); // Closes all activities and exits app
+        });
+    }
+}
